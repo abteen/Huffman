@@ -1,0 +1,15 @@
+This is a program that uses Huffman encoding to compress text files. 
+Functionality
+	For encode:
+		-i [FILE] : specifies input file. This is required. 
+		-o [FILE] : specifies ouput file. This is optional. Note: if verbose mode is turned on, and no output file specified, nothing will be printed or saved.
+		-v 	  : turns on verbose mode. Will print general informaiton on encoding.
+
+	For decode:
+		-i [FILE] : specifies input file, and is required.
+		-o [FILE] : specifies ouput file, and is not required. If no output file is specified, and verbose is not turned on, it will print the decoded text
+		-v 	  : turns on verose mode. Will print information regarding the file. Will print info regardless of output file.
+
+Author:
+	Abteen Ebrahimi
+	aaebrahi@ucsc.edu
