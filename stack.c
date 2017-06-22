@@ -1,5 +1,5 @@
 # include "stack.h"
-
+//tester comment
 stack *newStack()
 {
 	stack *tempStack = (stack *) malloc(sizeof(stack));
