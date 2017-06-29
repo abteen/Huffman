@@ -10,7 +10,8 @@ typedef struct stack stack;
 struct stack
 {
 	uint32_t size;
-	treeNode *head;
+	uint32_t top;
+	treeNode **list;
 };
 
 stack *newStack();
@@ -20,5 +21,5 @@ treeNode *pop(stack *);
 void push(stack *, treeNode *);
 
 bool empty(stack *);
-
+bool full(stack *);
 # endif

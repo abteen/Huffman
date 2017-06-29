@@ -2,24 +2,33 @@
 
 stack *newStack()
 {
-	stack *tempStack = (stack *) malloc(sizeof(stack));
-	tempStack->size = 0;
-	tempStack->head = NULL;
+	stack *tempStack = malloc(sizeof(stack));
+	tempStack->size = 10;
+	tempStack->top = 0;
+	tempStack->list = malloc(tempStack->size * sizeof(treeNode *));
 	return tempStack;
 }
 
 void delStack(stack *input)
 {
-	delTree(input->head);
+	for(uint32_t i = 0; i < input->size; i++)
+	{
+		delTree(input->list[i]);
+	}
+	
 	free(input);
 }
 
 void push(stack *inputStack, treeNode *inputNode)
 {
-	treeNode *tempHead = inputStack->head;
-	inputStack->head = inputNode;
-	inputNode->next = tempHead;
-	inputStack->size++;
+	if(full(inputStack))
+	{
+		inputStack->size = inputStack->size * 2;
+		inputStack->list = realloc(inputStack->list, inputStack->size * sizeof(treeNode *));
+	}
+	
+	inputStack->list[inputStack->top] = inputNode;
+	inputStack->top++;
 }
 
 treeNode *pop(stack *input)
@@ -28,13 +37,18 @@ treeNode *pop(stack *input)
 	{
 		return NULL;
 	}
-	treeNode *temp = input->head;
-	input->head = input->head->next;
-	input->size--;
+	treeNode *temp = input->list[input->top - 1];
+	input->list[input->top - 1] = NULL;
+	input->top--;
 	return temp;
 }
 
 bool empty(stack *input)
 {
 	return (input->size == 0);
+}
+
+bool full(stack *input)
+{
+	return (input->size == input->top);
 }

@@ -4,13 +4,19 @@ OBJECTS_E = encode.o stack.o huffman.o queue.o
 OBJECTS_D = decode.o stack.o huffman.o queue.o
 
 .PHONY	:	all
-all	:	encode decode
+all	:	encode decode tester
 
 encode	:	$(OBJECTS_E)
 	$(CC) $(OBJECTS_E) -o encode
 
 decode	:	$(OBJECTS_D)
 	$(CC) $(OBJECTS_D) -o decode
+
+tester	:	queue.o huffman.o tester.o
+	$(CC) queue.o huffman.o tester.o -o tester
+
+tester.o	:	tester.c
+	$(CC) -c tester.c
 
 encode.o	:	encode.c
 	$(CC) -c encode.c

@@ -23,9 +23,9 @@ static inline bitV *newVec(uint32_t l)
         return v;
 }
 
-static inline void delVec(bitV *v)
+static inline void delVec(bitV *ve)
 {
-        free(v->v); free(v);
+        free(ve->v); free(ve);
         return;
 }
 
