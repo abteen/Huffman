@@ -10,13 +10,15 @@
 typedef struct queue
 {
 	uint32_t size;
-	treeNode *head;
+	uint32_t head, tail;
+	treeNode **array;
 }queue;
 
 queue *newQueue();
 void delQueue(queue *);
 
 bool emptyQueue(queue *);
+bool fullQueue(queue *);
 
 bool enqueue(queue *, treeNode *);
 treeNode *dequeue(queue *);

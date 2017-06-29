@@ -97,23 +97,22 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	while(pQueue->size > 1)
+	while(pQueue->head != pQueue->tail - 1)
 	{
 		treeNode *first = dequeue(pQueue);
 		treeNode *second = dequeue(pQueue);
 		enqueue(pQueue, join(first, second));
-	}	
-		
+	}			
+	
 	code codeArray[256];
-
+	
 	for(int i = 0; i < 256; i++)
 	{
 		codeArray[i] = newCode();
 	}
 
 	code tempCode = newCode();
-	buildCode(pQueue->head, tempCode, codeArray);
-	
+	buildCode(pQueue->array[pQueue->head], tempCode, codeArray);	
 	uint32_t magicNumber = 0xdeadd00d;
 	
 	int o_file = 1;										//By default, ouput is stdout
@@ -139,7 +138,7 @@ int main(int argc, char **argv)
 		uint16_t treeCount = (3 * leafCount) - 1;
 		write(o_file, &treeCount, sizeof(treeCount));
 	
-		dumpTree(pQueue->head, o_file);
+		dumpTree(pQueue->array[pQueue->head], o_file);
 	}
 	else if(!verbose)
 	{
@@ -149,7 +148,7 @@ int main(int argc, char **argv)
                 uint16_t treeCount = (3 * leafCount) - 1;
                 write(o_file, &treeCount, sizeof(treeCount));
 
-                dumpTree(pQueue->head, o_file);
+                dumpTree(pQueue->array[pQueue->head], o_file);
 	}
 
 	for(int i = 0; i < 1024; i++) { buf[i] = 0; }

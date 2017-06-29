@@ -3,87 +3,90 @@
 queue *newQueue()
 {
 	queue *temp = (queue *) malloc(sizeof(queue));
-	temp->size = 0;
-	temp->head = NULL;
+	temp->size = 10;
+	temp->head = 0;
+	temp->tail = 0;
+	temp->array = malloc(temp->size * sizeof(treeNode *));
 	return temp;
 }
 
 void delQueue(queue *inputQueue)
 {
-	delTree(inputQueue->head);
+	for (uint32_t i = inputQueue->head; i != inputQueue->tail; i = (i + 1) % inputQueue->size)
+	{
+		delTree(inputQueue->array[i]);
+	}
 	free(inputQueue);
 }
 
 bool emptyQueue(queue *input)
 {
-	if(input->size == 0)
-	{
-		return true;
-	}
-	
-	return false;
+	return (input->tail == input->head);
+}
+
+bool fullQueue(queue *input)
+{
+	return ( ( (input->tail + 1) % input->size) == input->head );
 }
 
 bool enqueue(queue *inputQueue, treeNode *inputNode)
 {
-	if(emptyQueue(inputQueue)) // Empty
+	if(fullQueue(inputQueue))
 	{
-		inputNode->next = NULL;
-		inputQueue->head = inputNode;
-		inputQueue->size++;
-		return true;
+		inputQueue->size = inputQueue->size * 2;
+		inputQueue->array = realloc(inputQueue->array, inputQueue->size * sizeof(treeNode *));
 	}
-	
-	if((inputNode->count < inputQueue->head->count))
+
+	if(emptyQueue(inputQueue))
 	{
-		// Smaller than the head
-		inputNode->next = inputQueue->head;
-		inputQueue->head = inputNode;
-		inputQueue->size++;
+		inputQueue->array[inputQueue->tail] = inputNode;
+		inputQueue->tail = (inputQueue->tail + 1) % inputQueue->size;
 		return true;
 	}
 
-	treeNode *temp = inputQueue->head;
-	while(temp->next != NULL)
+	uint32_t location = inputQueue->tail;
+	if(location == 0) { location = inputQueue->size - 1; }
+	else { location--; }
+	while((inputQueue->array[location])->count > inputNode->count)
 	{
-		if(inputNode->count < (temp->next)->count)
+		inputQueue->array[(location + 1) % inputQueue->size] = inputQueue->array[location];
+		if(location == inputQueue->head)
 		{
-			inputNode->next = temp->next;
-			temp->next = inputNode;
-			inputQueue->size++;
-			return true;
+			if(inputNode->count > (inputQueue->array[inputQueue->head])->count) { break; }
+			else 
+			{
+				inputQueue->array[inputQueue->head] = inputNode;
+				inputQueue->tail = (inputQueue->tail + 1) % inputQueue->size;
+				return true;	
+			}
 		}
-
-		temp = temp->next;
+		if(location == 0) { location = inputQueue->size - 1; }
+		else { location--; }
 	}
-
-	temp->next = inputNode;
-	inputQueue->size++;
+	inputQueue->array[(location + 1) % inputQueue->size] = inputNode;
+	inputQueue->tail = (inputQueue->tail + 1) % inputQueue->size;
 	return true;
 }
 
 treeNode *dequeue(queue *inputQueue)
 {
-	treeNode *node = inputQueue->head;
+	if(emptyQueue(inputQueue)) { return NULL; }
+	treeNode *node = inputQueue->array[inputQueue->head];
 	if(node == NULL)
 	{
 		return NULL;
 	}
-	inputQueue->head = (inputQueue->head)->next;
-	inputQueue->size--;
+	inputQueue->head = (inputQueue->head + 1) % inputQueue->size;
 	return node;
 }
 
+
 void printQueue(queue *input)
 {
-	treeNode *temp = input->head;
-	while(temp != NULL)
+	for(uint32_t i = input->head; i != input->tail; i = (i + 1) % input->size)
 	{
-		printf("%lu\n", (temp->count));
-		temp = temp->next;
+		printf("%lu\n", (input->array[i])->count);
 	}
-
-	printf("size: %d\n", input->size);
 }
 
 			
