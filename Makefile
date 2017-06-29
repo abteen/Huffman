@@ -12,12 +12,6 @@ encode	:	$(OBJECTS_E)
 decode	:	$(OBJECTS_D)
 	$(CC) $(OBJECTS_D) -o decode
 
-tester	:	queue.o huffman.o tester.o
-	$(CC) queue.o huffman.o tester.o -o tester
-
-tester.o	:	tester.c
-	$(CC) -c tester.c
-
 encode.o	:	encode.c
 	$(CC) -c encode.c
 
